@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+pyvenv.cfg
+
+# Environment variables
+backend/.env
+
+# Flask
+instance/
+migrations/
+
+# Tests / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+logs/
+
+# IDE - PyCharm / JetBrains
+.idea/
+*.iml
