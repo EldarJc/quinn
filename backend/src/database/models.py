@@ -121,6 +121,12 @@ class Group(BaseModel):
     def is_owner(self, user_id: int) -> bool:
         return self.owner_id == user_id
 
+    def is_member(self, user_id: int) -> bool:
+        query = sa.select(group_members).where(
+            group_members.c.group_id == self.id, group_members.c.user_id == user_id
+        )
+        return db.session.scalar(query)
+
 
 sa.event.listen(Group.name, "set", generate_slug, retval=False)
 
@@ -170,6 +176,12 @@ class Event(BaseModel):
         if self.max_attendees is None:
             return False
         return self.count_attendees() >= self.max_attendees
+
+    def is_attendee(self, user_id: int) -> bool:
+        query = sa.select(event_attendees).where(
+            event_attendees.c.event_id == self.id, event_attendees.c.user_id == user_id
+        )
+        return db.session.scalar(query)
 
     def update_location(self, location_data: dict) -> None:
         if self.location and self.event_type in [EventType.ONLINE, EventType.WEBINAR]:
