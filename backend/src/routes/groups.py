@@ -3,12 +3,14 @@ from flask_jwt_extended import current_user, jwt_required
 from flask_smorest import Blueprint, abort
 
 from ..database import db
-from ..database.models import Group
+from ..database.models import Group, Tag
+from ..database.utils import CustomPage
 from ..schemas.group_schema import (
     CreateGroupSchema,
     GroupImageSchema,
     GroupMemberSchema,
     GroupSchema,
+    SearchGroupSchema,
     UpdateGroupSchema,
 )
 from ..utils import delete_image, save_image
@@ -25,6 +27,23 @@ group_members_schema = GroupMemberSchema(many=True)
 
 @bp.route("")
 class Groups(MethodView):
+    @bp.arguments(SearchGroupSchema, location="query")
+    @bp.response(200, groups_schema)
+    @bp.paginate(CustomPage, page_size=5)
+    def get(self, args):
+        query = db.select(Group)
+
+        name_search = args.get("name")
+        tags = args.get("tags")
+
+        if name_search:
+            query = query.where(Group.name.ilike(f"%{name_search}%"))
+
+        if tags:
+            query = query.where(Group.tags.any(Tag.name.in_(tags)))
+
+        return query.order_by(Group.id)
+
     @jwt_required()
     @bp.arguments(create_group_schema)
     @bp.response(201, group_schema)

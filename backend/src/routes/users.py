@@ -4,11 +4,13 @@ from flask_smorest import Blueprint, abort
 
 from ..database import db
 from ..database.models import User
+from ..database.utils import CustomPage
 from ..schemas.user_schema import (
     UpdateImageSchema,
     UpdateSchema,
     UserProfileSchema,
     UserPublicSchema,
+    UserSearchSchema,
 )
 from ..utils import delete_image, save_image
 
@@ -19,6 +21,20 @@ user_schema = UserPublicSchema()
 users_schema = UserPublicSchema(many=True)
 update_user_schema = UpdateSchema(partial=True)
 update_image_schema = UpdateImageSchema()
+
+
+@bp.route("")
+class UserList(MethodView):
+    @bp.arguments(UserSearchSchema, location="query")
+    @bp.response(200, users_schema)
+    @bp.paginate(CustomPage, page_size=5)
+    def get(self, args):
+        search = args.get("username")
+        query = db.select(User)
+        if search:
+            return query.where(User.username.ilike(f"%{search}%"))
+
+        return query
 
 
 @bp.route("/<string:username>")
