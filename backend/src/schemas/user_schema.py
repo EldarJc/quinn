@@ -82,3 +82,7 @@ class UpdateSchema(BaseUserSchema):
 
 class UpdateImageSchema(Schema):
     image = Upload(required=True)
+
+
+class UserSearchSchema(Schema):
+    username = fields.Str(required=False)

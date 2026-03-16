@@ -56,3 +56,8 @@ class GroupImageSchema(Schema):
 class GroupMemberSchema(Schema):
     id = fields.Int(dump_only=True)
     username = fields.Str(dump_only=True)
+
+
+class SearchGroupSchema(Schema):
+    name = fields.Str(required=False)
+    tags = fields.List(fields.Str(), required=False)
