@@ -207,6 +207,7 @@ class Location(BaseModel):
 
     country: Mapped[str] = mapped_column(sa.String(100))
     city: Mapped[str] = mapped_column(sa.String(100))
+    state: Mapped[str] = mapped_column(sa.String(100))
     address: Mapped[str] = mapped_column(sa.String(255))
 
     event_id: Mapped[int] = mapped_column(sa.ForeignKey("events.id"), unique=True)
