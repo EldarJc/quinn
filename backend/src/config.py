@@ -89,6 +89,11 @@ class BaseConfig:
         },
     }
 
+    # Redis Cache
+    CACHE_TYPE = "RedisCache"
+    CACHE_REDIS_URL = os.environ.get("REDIS_URL")
+    CACHE_DEFAULT_TIMEOUT = 3600
+
 
 class DevConfig(BaseConfig):
     """Development Configuration"""
