@@ -1,0 +1,27 @@
+services:
+
+  app:
+    container_name: quinn-backend
+    build:
+      context: ..
+      dockerfile: Docker/Dockerfile
+    ports:
+      - 8000:8000
+    env_file:
+      - ../.env
+    volumes:
+      - sqlite_data:/app/instance
+      - logs_data:/app/logs
+
+  redis:
+    image: redis:7-alpine
+    container_name: quinn-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+
+volumes:
+  sqlite_data:
+  logs_data:
+  redis_data:
