@@ -42,8 +42,12 @@ def register_blueprints() -> None:
     from .routes.groups import bp as groups_bp
     from .routes.tags import bp as tags_bp
     from .routes.users import bp as users_bp
+    from .routes.events import bp as events_bp
+    from .routes.locations import bp as locations_bp
 
     api.register_blueprint(auth_bp, url_prefix="/auth")
     api.register_blueprint(users_bp, url_prefix="/users")
     api.register_blueprint(groups_bp, url_prefix="/groups")
     api.register_blueprint(tags_bp, url_prefix="/tags")
+    api.register_blueprint(events_bp, url_prefix="/events")
+    api.register_blueprint(locations_bp, url_prefix="/locations")
