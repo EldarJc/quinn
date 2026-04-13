@@ -1,12 +1,10 @@
 <script setup>
 import {RouterLink} from 'vue-router';
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { storeToRefs } from 'pinia'
 import {useUserStore} from '@/stores/user.js';
 import defaultAvatar from '@/assets/user-logo.svg'
 
 const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
 
 const isOpen = ref(false)
 
@@ -69,7 +67,7 @@ onBeforeUnmount(() => {
         </RouterLink>
       </div>
       <div class="flex flex-1 justify-end">
-        <div v-if="user" class="flex items-center space-x-3">
+        <div v-if="userStore.user" class="flex items-center space-x-3">
           <RouterLink to="/" class="text-white relative group p-2 hover:text-[#608a89] rounded-full hover:bg-gray-100 transition-colors duration-200">
             <svg fill="currentColor" height="24" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.7 2H5.3C3.481 2 2 3.48 2 5.3v9.4C2 16.519 3.48 18 5.3 18h9.4c1.819 0 3.3-1.48 3.3-3.3V5.3C18 3.481 16.52 2 14.7 2zm1.499 12.7a1.5 1.5 0 01-1.499 1.499H5.3A1.5 1.5 0 013.801 14.7V5.3A1.5 1.5 0 015.3 3.801h9.4A1.5 1.5 0 0116.199 5.3v9.4zM14 10.9h-3.1V14H9.1v-3.1H6V9.1h3.1V6h1.8v3.1H14v1.8z"></path>
@@ -89,7 +87,7 @@ onBeforeUnmount(() => {
             >
               <div class="h-9 w-9 rounded-full overflow-hidden ring-2 ring-white">
                 <img
-                    :src="user.image_url || defaultAvatar"
+                    :src="userStore.user.image_url || defaultAvatar"
                     class="h-full w-full"
                     alt="Avatar"
                 />
@@ -100,21 +98,21 @@ onBeforeUnmount(() => {
                 v-show="isOpen"
                 class="absolute right-0 mt-4 w-64 bg-white rounded-lg shadow-xl py-1 border border-gray-100"
             >
-              <RouterLink to="/profile" class="px-4 py-3 border-b border-gray-100 flex items-center">
+              <RouterLink :to="{ name: 'profile', params: { username: userStore.user.username } }" class="px-4 py-3 border-b border-gray-100 flex items-center">
                 <div class="bg-gray-700 h-10 w-10 rounded-full overflow-hidden mr-3 ring-1 ring-[#608a89]">
                   <img
-                      :src="user.image_url || defaultAvatar"
+                      :src="userStore.user.image_url || defaultAvatar"
                       class="h-full w-full"
                       alt="Avatar"
                   />
                 </div>
                 <div>
                   <p class="font-medium text-gray-900">View Profile</p>
-                  <p class="text-sm text-gray-500">{{user.username}}</p>
+                  <p class="text-sm text-gray-500">{{userStore.user.username}}</p>
                 </div>
               </RouterLink>
 
-              <RouterLink to="/profile/settings" class="flex items-center px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-[#608a89] transition-colors">
+              <RouterLink :to="{ name: 'profile-settings' }" class="flex items-center px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-[#608a89] transition-colors">
                 <svg class="mr-3" fill="currentColor" height="20"  viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                   <path d="M11.145 18.995h-2.29a1.56 1.56 0 01-1.501-1.134l-.051-.18a2.161 2.161 0 00-2.604-1.504l-.185.046a1.561 1.561 0 01-1.731-.734l-1.146-1.985a1.561 1.561 0 01.229-1.864l.132-.137a2.163 2.163 0 000-3.007l-.13-.135a1.561 1.561 0 01-.23-1.866L2.783 4.51a1.56 1.56 0 011.73-.734l.186.046a2.161 2.161 0 002.603-1.504l.05-.18a1.562 1.562 0 011.503-1.134h2.29c.697 0 1.31.463 1.5 1.133l.053.183a2.157 2.157 0 002.599 1.502l.189-.047a1.561 1.561 0 011.73.734l1.147 1.985a1.561 1.561 0 01-.23 1.864l-.133.14a2.162 2.162 0 000 3.004l.132.137c.485.5.578 1.262.23 1.866l-1.145 1.984a1.56 1.56 0 01-1.731.734l-.187-.047a2.16 2.16 0 00-2.601 1.503l-.052.182a1.562 1.562 0 01-1.502 1.134zm-2.11-1.8l1.933-.01a3.947 3.947 0 014.77-2.754l.01.002.967-1.672-.008-.007a3.943 3.943 0 010-5.508l.007-.007-.966-1.672-.01.002a3.945 3.945 0 01-4.771-2.754l-.003-.01-1.933.009A3.946 3.946 0 014.26 5.569l-.01-.002-.966 1.672.008.007a3.943 3.943 0 010 5.508l-.007.007.966 1.672.01-.002a3.947 3.947 0 014.77 2.754l.004.01zM10 13c-1.654 0-3-1.346-3-3s1.346-3 3-3 3 1.346 3 3-1.346 3-3 3zm0-4.2c-.661 0-1.2.539-1.2 1.2 0 .66.539 1.2 1.2 1.2.66 0 1.199-.54 1.199-1.2 0-.661-.538-1.2-1.2-1.2z"></path>
                 </svg>
@@ -123,19 +121,19 @@ onBeforeUnmount(() => {
 
               <div class="border-t border-gray-100 my-1"></div>
 
-              <RouterLink to="/logout" class="flex items-center px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-[#608a89] transition-colors">
+              <RouterLink :to="{ name: 'logout' }" class="flex items-center px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-[#608a89] transition-colors">
                 <svg class="mr-3" fill="currentColor" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                   <path d="M13.701 1H6.298a3.299 3.299 0 00-3.299 3.299v8.402A3.299 3.299 0 006.298 16h.701v.858a2.26 2.26 0 002.255 2.259c.293 0 .594-.058.889-.184l5.487-2.347a2.257 2.257 0 001.369-2.075V4.299A3.298 3.298 0 0013.701 1zM7 6.767V14.2h-.701A1.5 1.5 0 014.8 12.701V4.299A1.5 1.5 0 016.299 2.8h6.494L8.37 4.692A2.257 2.257 0 007 6.767zm8.2 7.744a.457.457 0 01-.277.42l-5.487 2.347a.461.461 0 01-.181.039.46.46 0 01-.455-.459V6.767c0-.183.109-.348.277-.42L14.564 4a.461.461 0 01.181-.039.46.46 0 01.455.459v10.091zM10.3 9.7h1.8v2.585h-1.8V9.7z"></path>
                 </svg>
-                Sign out
+                Log Out
               </RouterLink>
             </div>
           </div>
         </div>
         <div v-else class="flex items-center justify-center gap-x-3">
-          <RouterLink to="/login" class="text-white font-semibold px-4 py-2 transition-all duration-200 hover:text-opacity-50 hover:bg-[#608a89] rounded-xl"> Login </RouterLink>
+          <RouterLink :to="{ name: 'login' }" class="text-white font-semibold px-4 py-2 transition-all duration-200 hover:text-opacity-50 hover:bg-[#608a89] rounded-xl"> Log In </RouterLink>
 
-          <RouterLink  to="/register"  class="text-white font-semibold px-4 py-2 transition-all duration-200 bg-transparent border-2 border-[#608a89] hover:bg-[#608a89] hover:text-white rounded-xl">
+          <RouterLink  :to="{ name: 'register' }"  class="text-white font-semibold px-4 py-2 transition-all duration-200 bg-transparent border-2 border-[#608a89] hover:bg-[#608a89] hover:text-white rounded-xl">
             Join community
           </RouterLink>
         </div>
