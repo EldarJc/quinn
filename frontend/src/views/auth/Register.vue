@@ -6,8 +6,8 @@ import { useUserStore } from '@/stores/user';
 
 const schema = yup.object({
   username: yup.string().required("Username is required!"),
-  firstName: yup.string().required("First Name is required!"),
-  lastName: yup.string().required("Last Name is required!"),
+  first_name: yup.string().required("First Name is required!"),
+  last_name: yup.string().required("Last Name is required!"),
   email: yup.string().email("Enter a valid email").required("Email is required!"),
   password: yup.string().min(8, 'Password must be at least 8 characters').required("Password is required!"),
 });
@@ -18,7 +18,7 @@ userStore.error = null;
 async function onSubmit(values, { setErrors }) {
   try {
     await userStore.register(values);
-    await router.push("/login");
+    await router.push({ name: 'login'});
   } catch (error) {
     setErrors(error);
   }
@@ -46,14 +46,14 @@ async function onSubmit(values, { setErrors }) {
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <Field name="firstName" type="text" placeholder="First name"
+            <Field name="first_name" type="text" placeholder="First name"
                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-300" />
-            <ErrorMessage name="firstName" class="text-red-500 text-sm" />
+            <ErrorMessage name="first_name" class="text-red-500 text-sm" />
           </div>
           <div>
-            <Field name="lastName" type="text" placeholder="Last name"
+            <Field name="last_name" type="text" placeholder="Last name"
                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-300" />
-            <ErrorMessage name="lastName" class="text-red-500 text-sm" />
+            <ErrorMessage name="last_name" class="text-red-500 text-sm" />
           </div>
         </div>
 
