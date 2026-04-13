@@ -2,29 +2,16 @@ import apiClient from '@/api/apiClient';
 
 class UserService {
 
-    login(username, password) {
-        return apiClient
-            .post('/auth/login', {username, password
-            })
-            .then(response => {
-                if (response.data) {
-                    return response.data;
-                }
-            });
+    login(payload) {
+        return apiClient.post('/auth/login', payload);
     }
 
     logout() {
-        return apiClient.post('/auth/logout')
+        return apiClient.post('/auth/logout');
     }
 
-    register(username, firstName, lastName, email, password) {
-        return apiClient.post('/auth/register', {
-            username,
-            first_name: firstName,
-            last_name: lastName,
-            email,
-            password
-        });
+    register(payload) {
+        return apiClient.post('/auth/register', payload);
     }
 
 
@@ -37,7 +24,15 @@ class UserService {
     }
 
     getUserProfile(username) {
-        return apiClient.get(`/users/${username}`)
+        return apiClient.get(`/users/${username}`);
+    }
+
+    updateUserImage(payload) {
+        return apiClient.put("/users/me/image", payload);
+    }
+
+    removeUserImage() {
+        return apiClient.delete(`/users/me/image`);
     }
 
 }

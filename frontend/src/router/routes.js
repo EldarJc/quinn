@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, START_LOCATION } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/auth/Login.vue'
 import Register from '@/views/auth/Register.vue';
@@ -19,22 +19,22 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login,
-      meta: { requiresGuest: true }
+      meta: { guest: true }
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
-      meta: { requiresGuest: true }
+      meta: { guest: true }
     },
     {
       path: '/logout',
       name: 'logout',
       component: Logout,
-      meta: { requiresAuth: true },
+      meta: { auth: true },
     },
     {
-      path: '/profile',
+      path: '/u/:username',
       name: 'profile',
       component: Profile,
     },
@@ -42,20 +42,27 @@ const router = createRouter({
       path: "/profile/settings",
       name: 'profile-settings',
       component: ProfileSettings,
-      meta: { requiresAuth: true },
+      meta: { auth: true },
     },
   ],
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
   const userStore = useUserStore();
 
-  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
-    return { path: "/login" };
+  if (from === START_LOCATION) {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      await userStore.fetchCurrentUser();
+    }
   }
 
-  if (to.meta.requiresGuest && userStore.isAuthenticated) {
-    return { path: "/" };
+  if (to.meta.auth && !userStore.isAuthenticated) {
+    return { name: 'login' }
+  }
+
+  if (to.meta.guest && userStore.isAuthenticated) {
+    return { name: 'home' };
   }
 
   return true;

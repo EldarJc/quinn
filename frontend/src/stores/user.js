@@ -14,15 +14,14 @@ export const useUserStore = defineStore('user', {
 
     actions: {
 
-        async login({ username, password }) {
+        async login(payload) {
             this.error = null
             try {
-                const data = await userService.login(username, password);
-                const { access_token, refresh_token } = data;
+                const response = await userService.login(payload);
+                const { access_token, refresh_token } = response.data;
                 localStorage.setItem('accessToken', access_token)
                 localStorage.setItem('refreshToken', refresh_token);
                 await this.fetchCurrentUser();
-                return data;
             } catch (error) {
                 this.user = null
                 this.error = error
@@ -35,10 +34,10 @@ export const useUserStore = defineStore('user', {
             localStorage.removeItem('refreshToken');
             this.user = null
         },
-        async register({ username, firstName, lastName, email, password }) {
+        async register(payload) {
             this.error = null
             try {
-                const response = await userService.register(username, firstName, lastName, email, password);
+                const response = await userService.register(payload);
                 return response.data;
             } catch (error) {
                 this.error = error;
@@ -50,11 +49,52 @@ export const useUserStore = defineStore('user', {
             try {
                 const {data} = await userService.getCurrentUser()
                 this.user = data
-            } catch (err) {
+            } catch (error) {
                 this.user = null
 
             }
         },
+
+        async updateCurrentUser(payload) {
+            const currentUser = this.user
+            try{
+                const {data} = await userService.updateCurrentUser(payload);
+                this.user = data
+            } catch (error) {
+                this.error = error;
+                this.user = currentUser
+                throw error
+            }
+        },
+
+        async updateUserImage(payload) {
+            try{
+                const {data} = await userService.updateUserImage(payload)
+                this.user = data
+
+            } catch (error) {
+                this.error = error;
+            }
+        },
+
+        async removeUserImage(){
+            try{
+                const {data} = await userService.removeUserImage()
+                this.user = data
+            } catch (error) {
+                this.error = error;
+            }
+        },
+
+        async fetchUser(username){
+            try{
+                const { data } = await userService.getUserProfile(username);
+                return data
+            } catch (error) {
+                throw error;
+            }
+
+        }
 
     }
 })
