@@ -5,6 +5,8 @@ from flask_smorest import Blueprint, abort
 from ..database import db
 from ..database.models import User
 from ..database.utils import CustomPage
+from ..schemas.event_schema import EventSchema
+from ..schemas.group_schema import GroupSchema
 from ..schemas.user_schema import (
     UpdateImageSchema,
     UpdateSchema,
@@ -21,6 +23,8 @@ user_schema = UserPublicSchema()
 users_schema = UserPublicSchema(many=True)
 update_user_schema = UpdateSchema(partial=True)
 update_image_schema = UpdateImageSchema()
+events_schema = EventSchema(many=True)
+groups_schema = GroupSchema(many=True)
 
 
 @bp.route("")
@@ -91,3 +95,21 @@ class UserImage(MethodView):
 
         user = current_user.update(image_id=None, image_path=None)
         return user
+
+@bp.route("/<string:username>/events")
+class UserEvents(MethodView):
+    @bp.response(200, events_schema)
+    @bp.paginate(CustomPage)
+    def get(self, username):
+        query = db.select(User).where(User.username == username)
+        user = db.session.scalar(query) or abort(404, message="User not found")
+        return user.joined_events.select()
+
+@bp.route("/<string:username>/groups")
+class UserGroups(MethodView):
+    @bp.response(200, groups_schema)
+    @bp.paginate(CustomPage)
+    def get(self, username):
+        query = db.select(User).where(User.username == username)
+        user = db.session.scalar(query) or abort(404, message="User not found")
+        return user.joined_groups.select()
