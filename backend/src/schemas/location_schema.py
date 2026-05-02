@@ -2,7 +2,7 @@ from marshmallow import Schema, fields
 
 
 class CountriesItemsSchema(Schema):
-    iso3 = fields.Str(dump_only=True)
+    Iso3 = fields.Str(dump_only=True)
     name = fields.Str(dump_only=True)
 
 

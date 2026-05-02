@@ -98,7 +98,7 @@ def get_cities_by_state(country: str, state: str) -> dict[str, Any] | Any:
         abort(502, message="Unable to fetch cities from external API")
 
 
-def get_cities_by_country(country: str) -> dict[str, Any] | None:
+def get_cities_by_country(country: str) -> list[str]:
     cities = get_all_cities()
     country_cities = cities.get(country, None)
 
