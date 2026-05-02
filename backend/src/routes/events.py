@@ -36,6 +36,7 @@ class Events(MethodView):
         location = event_data.pop("location", {})
         new_event = Event.create(commit=False, owner_id=current_user.id, **event_data)
         new_event.update_location(location)
+        new_event.attendees.add(current_user)
         new_event.save()
         return new_event
 
@@ -95,3 +96,30 @@ class EventPicture(MethodView):
         event.update(image_id=None, image_path=None)
 
         return event
+
+
+@bp.route("/<int:event_id>/memberships")
+class EventJoin(MethodView):
+    @jwt_required()
+    @bp.response(204)
+    @bp.doc(security=[{"Bearer Auth": []}])
+    def post(self, event_id):
+        event = Event.get_by_id(event_id) or abort(404, message="Event not found")
+
+        if not event.is_attendee(current_user.id):
+            event.attendees.add(current_user)
+            db.session.commit()
+
+        return {}
+
+    @jwt_required()
+    @bp.response(204)
+    @bp.doc(security=[{"Bearer Auth": []}])
+    def delete(self, event_id):
+        event = Event.get_by_id(event_id) or abort(404, message="Event not found")
+
+        if event.is_attendee(current_user.id) and not event.is_owner(current_user.id):
+            event.attendees.remove(current_user)
+            db.session.commit()
+
+        return {}
