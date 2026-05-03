@@ -1,9 +1,9 @@
 from flask_smorest.fields import Upload
 from marshmallow import Schema, fields, validate
 
+from .tag_schema import RelationshipTagSchema, TagSchema
 from ..constants import EventType
 from ..utils import get_image
-from .tag_schema import RelationshipTagSchema, TagSchema
 
 
 class EventLocationSchema(Schema):
@@ -20,6 +20,7 @@ class EventImageSchema(Schema):
 
 class EventSchema(Schema):
     id = fields.Int(dump_only=True)
+    slug = fields.Str(dump_only=True)
     image_path = fields.Method("get_image_path", dump_only=True)
     title = fields.Str(dump_only=True)
     description = fields.Str(dump_only=True)

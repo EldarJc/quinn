@@ -1,3 +1,4 @@
+from flask import url_for, redirect
 from flask.views import MethodView
 from flask_jwt_extended import current_user, jwt_required
 from flask_smorest import Blueprint, abort
@@ -39,6 +40,20 @@ class Events(MethodView):
         new_event.attendees.add(current_user)
         new_event.save()
         return new_event
+
+
+@bp.route("/<int:event_id>/<string:event_slug>")
+class EventDetails(MethodView):
+    @bp.response(200, event_schema)
+    @bp.alt_response(301)
+    def get(self, event_id, event_slug):
+        event = Event.get_by_id(event_id) or abort(404, message="Event not found")
+
+        if event.slug != event_slug:
+            event_url = url_for("Event.EventDetails", event_id=event.id, event_slug=event.slug)
+            return redirect(event_url, code=301)
+
+        return event
 
 
 @bp.route("/<int:event_id>")
