@@ -6,6 +6,8 @@ import Logout from '@/views/auth/Logout.vue';
 import Profile from '@/views/user/Profile.vue';
 import ProfileSettings from '@/views/user/ProfileSettings.vue';
 import {useUserStore} from '@/stores/user';
+import CreateEvent from "@/views/event/CreateEvent.vue";
+import EventDetails from "@/views/event/EventDetails.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,16 @@ const router = createRouter({
       component: ProfileSettings,
       meta: { auth: true },
     },
+    {
+      path: '/events/create',
+      name: 'create-event',
+      component: CreateEvent,
+    },
+    {
+      path: '/events/:id/:slug',
+      name: 'event-details',
+      component: EventDetails,
+    }
   ],
 })
 
