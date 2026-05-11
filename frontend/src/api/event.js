@@ -5,6 +5,10 @@ class EventService {
         return apiClient.post('/events', payload);
     }
 
+    getEvents(filters = {}) {
+        return apiClient.get('/events', { params: filters });
+    }
+
     getEvent(eventId, eventSlug) {
         return apiClient.get(`/events/${eventId}/${eventSlug}`);
     }
