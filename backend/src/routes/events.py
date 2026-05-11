@@ -2,14 +2,16 @@ from flask import url_for, redirect
 from flask.views import MethodView
 from flask_jwt_extended import current_user, jwt_required
 from flask_smorest import Blueprint, abort
+from sqlalchemy.orm import joinedload, selectinload
 
 from ..database import db
-from ..database.models import Event
+from ..database.models import Event, Location, Tag
 from ..database.utils import CustomPage
 from ..schemas.event_schema import (
     CreateEventSchema,
     EventImageSchema,
     EventSchema,
+    EventSearchSchema
 )
 from ..utils import delete_image, save_image
 
@@ -20,14 +22,63 @@ update_event_schema = CreateEventSchema(partial=True)
 
 bp = Blueprint("Event", __name__)
 
+SORT_MAP = {
+    "date_asc": Event.start_date.asc(),
+    "date_desc": Event.start_date.desc(),
+    "newest": Event.created_at.desc(),
+}
+
+def create_query_filter(query, **kwargs):
+    search = kwargs.get("search")
+    if search:
+        term = f"%{search}%"
+        query = query.where(Event.title.ilike(term))
+
+    country = kwargs.get("country")
+    state = kwargs.get("state")
+    city = kwargs.get("city")
+
+    if country or state or city:
+        query = query.join(Event.location)
+        if country:
+            query = query.where(Location.country.ilike(f"%{country}%"))
+        if state:
+            query = query.where(Location.state.ilike(f"%{state}%"))
+        if city:
+            query = query.where(Location.city.ilike(f"%{city}%"))
+
+    tags = kwargs.get("tags")
+    if tags:
+        query = query.where(Event.tags.any(Tag.id.in_(tags)))
+
+    event_type = kwargs.get("event_type")
+    if event_type:
+        query = query.where(Event.event_type == event_type)
+
+    return query
+
 
 @bp.route("")
 class Events(MethodView):
+    @bp.arguments(EventSearchSchema, location="query")
     @bp.response(200, events_schema)
-    @bp.paginate(CustomPage, page_size=5)
-    def get(self):
-        query = db.select(Event)
+    @bp.paginate(CustomPage, page_size=20)
+    def get(self, filters):
+        query = (
+            db.select(Event)
+            .options(
+                joinedload(Event.location),
+                selectinload(Event.tags),
+            )
+        )
+
+        query = create_query_filter(query, **filters)
+
+        sort_key = filters.get("sort", "date_asc")
+        query = query.order_by(SORT_MAP.get(sort_key, Event.start_date.asc()))
+
         return query
+
 
     @jwt_required()
     @bp.arguments(create_event_schema)

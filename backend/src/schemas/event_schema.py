@@ -56,3 +56,15 @@ class CreateEventSchema(Schema):
         required=True,
         validate=validate.Length(min=2, max=5, error="Select between 2 and 5 tags."),
     )
+
+class EventSearchSchema(Schema):
+    search = fields.Str()
+    city = fields.Str()
+    state = fields.Str()
+    country = fields.Str()
+    tags = fields.List(fields.Int())
+    sort = fields.Str(
+        load_default="date_asc",
+        validate=validate.OneOf(["date_asc", "date_desc", "newest"]),
+    )
+    event_type = fields.Enum(enum=EventType)
