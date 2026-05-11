@@ -1,9 +1,9 @@
 import apiClient from '@/api/apiClient';
 
 class TagService {
-    getTags(page, limit = 10) {
+    getTags(page = 1, pageSize = 50) {
         return apiClient.get('/tags', {
-            params: { page, limit }
+            params: {page, page_size: pageSize}
         });
     }
 }
