@@ -32,7 +32,7 @@ onBeforeUnmount(() => {
   <header class="bg-[#2c3e50] w-full sticky top-0 z-50">
     <nav class="mx-auto flex max-w-7xl items-center justify-between h-16 px-8">
       <div class="flex lg:flex-1">
-        <RouterLink to="/" class="flex items-center group">
+        <RouterLink :to="{ name: 'home' }" class="flex items-center group">
             <img
                 src="@/assets/logo.png"
                 alt="Quinn Logo"
@@ -41,13 +41,13 @@ onBeforeUnmount(() => {
         </RouterLink>
       </div>
       <div class="flex gap-x-3">
-        <RouterLink to="/" class="text-white font-semibold hover:text-[#608a89] px-4 py-2 flex items-center rounded-xl hover:bg-blue-50 transition-colors duration-200">
+        <RouterLink :to="{ name: 'home' }" class="text-white font-semibold hover:text-[#608a89] px-4 py-2 flex items-center rounded-xl hover:bg-blue-50 transition-colors duration-200">
           <svg class="mr-3" fill="currentColor" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
             <svg class="mr-3" fill="currentColor" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M17.875 8.525a1.584 1.584 0 00-.35-.52L11.13 1.653a1.602 1.602 0 00-2.264 0L2.47 8.005a1.604 1.604 0 00-.473 1.135v6.374a3.3 3.3 0 003.3 3.3h3.7V12h2v6.814h3.7a3.3 3.3 0 003.3-3.3V9.14c0-.211-.042-.42-.123-.615h.001z"></path></svg>
           </svg>
           Home
         </RouterLink>
-        <RouterLink to="/events" class="text-white font-semibold hover:text-[#608a89] px-4 py-2 flex items-center rounded-lg hover:bg-blue-50 transition-colors duration-200">
+        <RouterLink :to="{ name: 'event-list' }" class="text-white font-semibold hover:text-[#608a89] px-4 py-2 flex items-center rounded-lg hover:bg-blue-50 transition-colors duration-200">
           <svg class="mr-3" fill="currentColor" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
             <path d="M15 12.05c1.08 0 1.95.87 1.95 1.95s-.87 1.95-1.95 1.95-1.95-.87-1.95-1.95.87-1.95 1.95-1.95zm0-1.8c-2.07 0-3.75 1.68-3.75 3.75 0 2.07 1.68 3.75 3.75 3.75 2.07 0 3.75-1.68 3.75-3.75 0-2.07-1.68-3.75-3.75-3.75zM5 12.05c1.08 0 1.95.87 1.95 1.95S6.08 15.95 5 15.95 3.05 15.08 3.05 14s.87-1.95 1.95-1.95zm0-1.8c-2.07 0-3.75 1.68-3.75 3.75 0 2.07 1.68 3.75 3.75 3.75 2.07 0 3.75-1.68 3.75-3.75 0-2.07-1.68-3.75-3.75-3.75zM10 4.05c1.08 0 1.95.87 1.95 1.95S11.08 7.95 10 7.95 8.05 7.08 8.05 6 8.92 4.05 10 4.05zm0-1.8C7.93 2.25 6.25 3.93 6.25 6c0 2.07 1.68 3.75 3.75 3.75 2.07 0 3.75-1.68 3.75-3.75 0-2.07-1.68-3.75-3.75-3.75z"></path>
           </svg>
@@ -59,7 +59,7 @@ onBeforeUnmount(() => {
           </svg>
           Communities
         </RouterLink>
-        <RouterLink to="/" class="text-white font-semibold hover:text-[#608a89] px-4 py-2 flex items-center rounded-lg hover:bg-blue-50 transition-colors duration-200">
+        <RouterLink :to="{ name: 'home' }" class="text-white font-semibold hover:text-[#608a89] px-4 py-2 flex items-center rounded-lg hover:bg-blue-50 transition-colors duration-200">
           <svg class="mr-3" fill="currentColor" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
             <path d="M18.278 2.632a2.265 2.265 0 00-1.698-.627c-2.95.165-4.67.827-6.58 1.987-1.91-1.16-3.63-1.822-6.581-1.987a2.273 2.273 0 00-1.697.627A2.327 2.327 0 001 4.312v9.428c0 1.23.966 2.241 2.198 2.302 2.724.136 4.175.715 5.761 1.67a2.019 2.019 0 002.082 0c1.586-.955 3.037-1.534 5.761-1.67a2.308 2.308 0 002.199-2.302V4.312c0-.632-.264-1.244-.723-1.68zM3.288 14.238a.507.507 0 01-.488-.498V4.312c0-.189.1-.312.16-.368a.487.487 0 01.333-.136h.027c2.625.147 4.043.692 5.78 1.752v10.158c-1.535-.819-3.177-1.348-5.813-1.48h.001zM17.2 13.74a.505.505 0 01-.488.498c-2.635.132-4.277.661-5.812 1.48V5.56c1.736-1.06 3.155-1.606 5.779-1.752a.47.47 0 01.361.136c.06.056.16.18.16.368v9.427zM12 6.95c1.131-.469 2.385-.765 4-.9v1.794c-1.678.152-2.842.5-4 1.081V6.95zm0 4.064c1.131-.469 2.385-.765 4-.9v1.794c-1.678.152-2.842.5-4 1.081v-1.975z"></path>
           </svg>
@@ -68,7 +68,7 @@ onBeforeUnmount(() => {
       </div>
       <div class="flex flex-1 justify-end">
         <div v-if="userStore.user" class="flex items-center space-x-3">
-          <RouterLink to="/" class="text-white relative group p-2 hover:text-[#608a89] rounded-full hover:bg-gray-100 transition-colors duration-200">
+          <RouterLink :to="{ name: 'create-event' }"  class="text-white relative group p-2 hover:text-[#608a89] rounded-full hover:bg-gray-100 transition-colors duration-200">
             <svg fill="currentColor" height="24" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.7 2H5.3C3.481 2 2 3.48 2 5.3v9.4C2 16.519 3.48 18 5.3 18h9.4c1.819 0 3.3-1.48 3.3-3.3V5.3C18 3.481 16.52 2 14.7 2zm1.499 12.7a1.5 1.5 0 01-1.499 1.499H5.3A1.5 1.5 0 013.801 14.7V5.3A1.5 1.5 0 015.3 3.801h9.4A1.5 1.5 0 0116.199 5.3v9.4zM14 10.9h-3.1V14H9.1v-3.1H6V9.1h3.1V6h1.8v3.1H14v1.8z"></path>
             </svg>
