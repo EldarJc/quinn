@@ -50,7 +50,9 @@ async function handleSubmit(values, { setErrors }) {
     const newEventSlug = response.data.slug;
 
     if (image){
-      await eventService.updateImage(newEventId, image);
+      const formData = new FormData();
+      formData.append('image', image);
+      await eventService.updateImage(newEventId, formData);
     }
 
     await router.push({

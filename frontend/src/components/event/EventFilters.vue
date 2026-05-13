@@ -156,7 +156,7 @@ const toggleTag = (tagId) => {
         <select
             v-model="filters.state"
             @change="onStateChange"
-            class="w-full rounded-lg border-gray-300 text-gray-700 focus:border-teal-500 focus:ring-teal-500 bg-gray-50"
+            class="w-full rounded-lg border-gray-300 text-gray-700 focus:border-teal-500 focus:ring-teal-500 bg-gray-50 p-2"
         >
           <option value="">All States</option>
           <option v-for="s in locationStore.states" :key="s.state_code" :value="s.name">
@@ -169,7 +169,7 @@ const toggleTag = (tagId) => {
         <select
             v-model="filters.city"
             @change="$emit('filter-changed')"
-            class="w-full rounded-lg border-gray-300 text-gray-700 focus:border-teal-500 focus:ring-teal-500 bg-gray-50"
+            class="w-full rounded-lg border-gray-300 text-gray-700 focus:border-teal-500 focus:ring-teal-500 bg-gray-50 p-2"
         >
           <option value="">All Cities</option>
           <option v-for="city in locationStore.cities" :key="city" :value="city">

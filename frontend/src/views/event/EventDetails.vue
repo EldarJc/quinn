@@ -133,19 +133,19 @@ onMounted(async () => {
               </li>
               <li class="w-full h-px bg-slate-100"></li>
               <li v-if="event.max_attendees" class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-2xl bg-[#EAF2FA] flex items-center justify-center text-[#2c3e50] shrink-0">
+                <div class="w-9 h-9 rounded-2xl bg-[#EAF2FA] flex items-center justify-center text-[#2c3e50] shrink-0">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                   </svg>
                 </div>
                 <div>
                   <span class="block text-xs font-bold text-slate-400 uppercase tracking-wide">Max attendees</span>
-                  <span class="block text-lg font-semibold text-[#2c3e50] mt-0.5">{{ event.max_attendees }} people</span>
+                  <span class="block text-md font-semibold text-[#2c3e50] mt-0.5">{{ event.max_attendees }} people</span>
                 </div>
               </li>
             </ul>
             <div class="mt-10">
-              <button class="w-full px-6 py-4 text-lg font-bold text-white bg-[#2c3e50] rounded-2xl hover:bg-gray-500 transition-all active:scale-[0.98] shadow-md shadow-[#2c3e50]/20 hover:shadow-xl hover:shadow-[#2c3e50]/30">
+              <button class="w-full px-4 py-3 text-lg font-bold text-white bg-[#2c3e50] rounded-2xl hover:bg-gray-500 transition-all active:scale-[0.98] shadow-md shadow-[#2c3e50]/20 hover:shadow-xl hover:shadow-[#2c3e50]/30">
                 Join Event
               </button>
             </div>

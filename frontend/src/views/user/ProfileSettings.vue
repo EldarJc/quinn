@@ -31,7 +31,6 @@ async function removeImage() {
     isLoading.value = true
     await userStore.removeUserImage()
   } catch (err) {
-    console.error('Error removing image:', err)
   } finally {
     isLoading.value = false
   }
@@ -86,7 +85,7 @@ async function updateField() {
 
           <div class="space-y-4">
             <div v-if="fieldName === 'Image'">
-              <DragDrop v-model="imageFile" />
+              <DragDrop v-model="imageFile" :preview="user?.image_url" />
             </div>
             <div v-else>
               <input

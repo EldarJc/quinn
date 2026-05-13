@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import {Field, useField} from "vee-validate";
+import { Field, useField } from "vee-validate";
 import { useLocationStore } from '@/stores/location';
 
 const locationStore = useLocationStore();
@@ -11,15 +11,15 @@ onMounted(async () => {
 });
 
 const countryUpdate = async (event) => {
-  const countryIso = event.target.value;
+  const countryName = event.target.value;
   locationStore.clearData();
 
-  if (!countryIso) return;
+  if (!countryName) return;
 
-  const countryObj = locationStore.countries.find(c => c.Iso3 === countryIso);
+  const countryObj = locationStore.countries.find(c => c.name === countryName);
   if (!countryObj) return;
 
-  await locationStore.fetchStates(countryIso);
+  await locationStore.fetchStates(countryObj.Iso3);
 
   if (locationStore.states.length === 0) {
     await locationStore.fetchCitiesByCountry(countryObj.name);
@@ -27,18 +27,13 @@ const countryUpdate = async (event) => {
 };
 
 const stateUpdate = async (event) => {
-  const stateCode = event.target.value;
+  const stateName = event.target.value;
 
   locationStore.cities = [];
 
-  if (!stateCode || !selectedCountry.value) return;
+  if (!stateName || !selectedCountry.value) return;
 
-  const countryObj = locationStore.countries.find(c => c.Iso3 === selectedCountry.value);
-  const stateObj = locationStore.states.find(s => s.state_code === stateCode);
-
-  if (countryObj && stateObj) {
-    await locationStore.fetchCitiesByState(countryObj.name, stateObj.name);
-  }
+  await locationStore.fetchCitiesByState(selectedCountry.value, stateName);
 };
 </script>
 
@@ -53,20 +48,22 @@ const stateUpdate = async (event) => {
         <label class="block text-sm font-medium text-slate-700 mb-1">Country</label>
         <Field name="location.country" as="select" @change="countryUpdate" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 focus:bg-white focus:outline-none focus:border-[#608a89] focus:ring-4 focus:ring-[#608a89]/10 transition-all duration-200">
           <option value="" disabled>Select country</option>
-          <option v-for="country in locationStore.countries" :key="country.Iso3" :value="country.Iso3">
+          <option v-for="country in locationStore.countries" :key="country.Iso3" :value="country.name">
             {{ country.name }}
           </option>
         </Field>
       </div>
+
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">State / Region</label>
         <Field name="location.state" as="select" @change="stateUpdate" :disabled="!selectedCountry || locationStore.states.length === 0" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 focus:bg-white focus:outline-none focus:border-[#608a89] focus:ring-4 focus:ring-[#608a89]/10 disabled:opacity-60 disabled:bg-slate-100 disabled:cursor-not-allowed transition-all duration-200">
           <option value="">Select state</option>
-          <option v-for="state in locationStore.states" :key="state.state_code" :value="state.state_code">
+          <option v-for="state in locationStore.states" :key="state.state_code" :value="state.name">
             {{ state.name }}
           </option>
         </Field>
       </div>
+
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">City</label>
         <Field name="location.city" as="select" :disabled="!selectedCountry || locationStore.cities.length === 0" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 focus:bg-white focus:outline-none focus:border-[#608a89] focus:ring-4 focus:ring-[#608a89]/10 disabled:opacity-60 disabled:bg-slate-100 disabled:cursor-not-allowed transition-all duration-200">
